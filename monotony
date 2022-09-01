@@ -13,12 +13,14 @@ import os
 PARSER = argparse.ArgumentParser(
     description="Generate and store monotonically increasing integers"
 )
-# PARSER.add_argument("name", help="The name of the numer to retrieve")
 GROUP = PARSER.add_mutually_exclusive_group(required=True)
-GROUP.add_argument("-n", "--number", metavar='NAME', help="Get the next number")
-GROUP.add_argument("-r", "--reset", metavar='NAME',  help="Reset a specific number")
+GROUP.add_argument("-n", "--number", metavar="NAME", help="Get the next number")
+GROUP.add_argument("-r", "--reset", metavar="NAME", help="Reset a specific number")
 GROUP.add_argument(
-    "-l", "--list", action="store_true", help="List currently configured numbers"
+    "-l",
+    "--list",
+    action="store_true",
+    help="List currently configured number names and their last values",
 )
 
 ARGV = PARSER.parse_args()
@@ -48,13 +50,11 @@ if ARGV.number:
 
 if ARGV.reset:
     config.read(config_file)
-    # config["DEFAULT"][ARGV.name] = "0"
-    config.remove_option('DEFAULT', ARGV.reset)
+    config.remove_option("DEFAULT", ARGV.reset)
     with open(config_file, "w") as configfile:
         config.write(configfile)
 
 if ARGV.list:
     config.read(config_file)
     for key in config["DEFAULT"]:
-        print(key)
-
+        print("{} : {}".format(key, config["DEFAULT"][key]))
