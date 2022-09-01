@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+
+"""
+Small utility script to provide monotonically increasing integers.
+Use it in your build pipelines, or wherever.
+"""
+
+import argparse
+import configparser
+import os
+
+
+PARSER = argparse.ArgumentParser(
+    description="Generate and store monotonically increasing integers"
+)
+# PARSER.add_argument("name", help="The name of the numer to retrieve")
+GROUP = PARSER.add_mutually_exclusive_group(required=True)
+GROUP.add_argument("-n", "--number", metavar='NAME', help="Get the next number")
+GROUP.add_argument("-r", "--reset", metavar='NAME',  help="Reset a specific number")
+GROUP.add_argument(
+    "-l", "--list", action="store_true", help="List currently configured numbers"
+)
+
+ARGV = PARSER.parse_args()
+
+config = configparser.ConfigParser()
+
+config_file = os.path.expanduser("~/.monotony.ini")
+
+if not os.path.exists(config_file):
+    config["DEFAULT"] = {"example": "1"}
+    with open(config_file, "w") as configfile:
+        config.write(configfile)
+
+
+if ARGV.number:
+    config.read(config_file)
+    try:
+        NEXT_NUMBER = int(config["DEFAULT"][ARGV.number]) + 1
+    except KeyError:
+        NEXT_NUMBER = 1
+
+    config["DEFAULT"][ARGV.number] = str(NEXT_NUMBER)
+
+    with open(config_file, "w") as configfile:
+        config.write(configfile)
+    print(NEXT_NUMBER)
+
+if ARGV.reset:
+    config.read(config_file)
+    # config["DEFAULT"][ARGV.name] = "0"
+    config.remove_option('DEFAULT', ARGV.reset)
+    with open(config_file, "w") as configfile:
+        config.write(configfile)
+
+if ARGV.list:
+    config.read(config_file)
+    for key in config["DEFAULT"]:
+        print(key)
+
