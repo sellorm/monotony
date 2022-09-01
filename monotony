@@ -14,8 +14,18 @@ PARSER = argparse.ArgumentParser(
     description="Generate and store monotonically increasing integers"
 )
 GROUP = PARSER.add_mutually_exclusive_group(required=True)
-GROUP.add_argument("-n", "--number", metavar="NAME", help="Get the next number")
-GROUP.add_argument("-r", "--reset", metavar="NAME", help="Reset a specific number")
+GROUP.add_argument(
+    "-n",
+    "--number",
+    metavar="NAME",
+    help="Get the next number for a given NAME or initialise a new NAME",
+)
+GROUP.add_argument(
+    "-r",
+    "--reset",
+    metavar="NAME",
+    help="Reset a specific number NAME by removing it from monotony",
+)
 GROUP.add_argument(
     "-l",
     "--list",
