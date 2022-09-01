@@ -7,7 +7,7 @@ However, if you're outside of a build system, you might not have easy access a n
 
 Monotony will allow you to create and recall an arbitrary amount of numbers, storing the current number as it goes.
 
-Monotony requires Python3.
+Monotony requires **Python3**.
 
 ## Usage
 
@@ -44,11 +44,12 @@ You can create as many of these sequences as you like:
 
 
 ``` bash
-./monotony -n another_number
+./monotony -n another_number ; ./monotony -n another_number
 ```
 
 ```
 1
+2
 ```
 
 Since the current number is recorded in a config file (`~/.monotony.ini`), you can come back weeks later and continue the sequence exactly where you left off.
@@ -68,8 +69,8 @@ To see a list of currently tracked numbers:
 ```
 
 ```
-another_number
-example
+another_number : 2
+example : 1
 ```
 
 ## License
